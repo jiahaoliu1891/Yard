@@ -1,0 +1,19 @@
+I use fifo queue to implement First-Come-First-Serve feature. 
+Also I use a hashmap to count how many pets has thread release into the yard.
+A thread can enter critical section by consider following conditions:
+    if hashmap[threadId] != 0, which means there are pet in yard released by thread
+        enter yard
+        Explain:
+        1.1 consider a thread calling: yard.enterAlicePet(); yard.enterAlicePet(); 
+            In the second calling, there are already AlicePet in yard, 
+            therefore thread can just release AlicePet with out waiting
+        1.2 The hashmap is designed to mainly avoid deadlock.
+    else if thread is at the head of the queue and BobPet == 0
+        enter yard
+
+As explained, if there are many threads waiting, each time the first thread in queue release pet.
+Therefore it is starvation free (First Come First Serve).
+For multual exclusion, the thread will release AlicePet only in two situations:
+1. BobPet == 0, therefore no BobPet in yard
+2. hashmap[threadId] != 0, already AlicePet in yard, therefore no BobPet in yard
+Therefore it preserves multual exclusion. 
